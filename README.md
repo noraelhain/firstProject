@@ -17,3 +17,11 @@
 # php artisan migrate --seed
 
 # php artisan serve
+
+## ----------------------
+
+# composer require laravel/santcum --> install santcum
+
+# php artisan vendor:publish --provider="Laravel\Santcum\SantcumServiceProvider"
+
+# php artisan migrate
