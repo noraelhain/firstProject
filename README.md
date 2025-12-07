@@ -1,4 +1,4 @@
-## ecommerce_project
+## ecommerce_project_task
 
 # password `12345admin`
 
