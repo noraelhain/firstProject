@@ -6,12 +6,14 @@
 
 ## inastallation
 
+# git clone (link repo)
+
 # composer install
 
 # cp .env.example .env
 
-# app key `php artisan:generate`
+# app key `php artisan key:generate`
 
-# php artisan db:seed
+# php artisan migrate --seed
 
 # php artisan serve
