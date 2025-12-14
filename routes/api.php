@@ -10,7 +10,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::middleware('auth:santcum')->prefix('hotels')->group(function () {
+Route::middleware('auth:sanctum')->prefix('hotels')->group(function () {
     Route::post('add', [HotelController::class, 'store']);
     Route::delete('/delete/{id}', [HotelController::class, 'destroy']);
     Route::put('update/{id}', [HotelController::class, 'update']);
@@ -18,4 +18,4 @@ Route::middleware('auth:santcum')->prefix('hotels')->group(function () {
 
 
 //register
-Route::post('/register)', [AuthController::class, 'register']);
+Route::post('/register', [AuthController::class, 'register']);
