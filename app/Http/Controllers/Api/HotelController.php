@@ -26,12 +26,15 @@ class HotelController extends Controller
         $validate = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:2000'],
-            'category_id' => ['required', 'integer', 'exists:categories,category_id'],
+            'category_id' => ['required', 'integer', 'exists:categories,id'],
             'city' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
+            'cover'   =>['required','image','mimes:jpg,png,jpeg,gif','max:2024'],
         ]);
 
         $hotel = Hotel::create($validate);
+
+        $hotel ->addMediaFromRequest('cover')->toMediaCollection('cover');
 
         return response()->json([
             'status' => true,
@@ -45,9 +48,10 @@ class HotelController extends Controller
                 'name' => $hotel->name,
                 'description' => $hotel->description,
                 'category_id' => $hotel->category_id,
-                'category' => $hotel->catergory()->name,
+                'category' => $hotel->catergory?->name,
                 'city' => $hotel->city,
                 'address' => $hotel->city,
+                'cover' => $hotel->cover_url
 
             ]
         ]);
@@ -124,7 +128,7 @@ class HotelController extends Controller
         $validate = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:2000'],
-            'category_id' => ['required', 'integer', 'exists:categories,category_id'],
+            'category_id' => ['required', 'integer', 'exists:categories,id'],
             'city' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
         ]);

@@ -3,7 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api;
+// use App\Http\Controllers\Api;
 use App\Http\Controllers\Api\HotelController;
 
 Route::get('/user', function (Request $request) {
@@ -13,9 +13,12 @@ Route::get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->prefix('hotels')->group(function () {
     Route::post('add', [HotelController::class, 'store']);
     Route::delete('/delete/{id}', [HotelController::class, 'destroy']);
-    Route::put('update/{id}', [HotelController::class, 'update']);
+    Route::post('update/{id}', [HotelController::class, 'update']);
 });
 
 
 //register
 Route::post('/register', [AuthController::class, 'register']);
+
+Route::post('/login', [AuthController::class, 'login']);
+// Route::post('/login', [AuthController::class,'login']);

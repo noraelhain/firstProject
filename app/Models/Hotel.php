@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
+use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Hotel extends Model
+class Hotel extends Model implements HasMedia
 {
-  /**
-   * The attributes that are mass assignable.
-   */
+    use InteractsWithMedia;
 
-    protected $fillable=[
+    protected $fillable = [
         'name',
         'city',
         'description',
@@ -18,7 +18,18 @@ class Hotel extends Model
         'category_id'
     ];
 
-    public function catergory(){
+    public function category() {
         return $this->belongsTo(Category::class);
     }
+
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('cover')->singleFile(); 
+    }
+
+ public function getCoverUrlAttribute(): ?string{
+    $cover = $this->getFirstMedia('cover');
+    return $cover ? $cover->getUrl() : null;
+}
 }
