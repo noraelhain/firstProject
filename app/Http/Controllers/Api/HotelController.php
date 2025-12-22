@@ -5,64 +5,50 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Hotel;
 use Illuminate\Http\Request;
-
+use App\Traits\ApiResponse;
+use App\Http\Resources\HotelResource;
+use App\Http\Requests\HotelRequest;
 class HotelController extends Controller
 {
-    public function store(Request $request)
-    {
 
-        $user = $request->user();
+    use ApiResponse;
+public function store(HotelRequest $request)
+{
+    $user = $request->user();
 
-        if (!$user) {
-            return response()->json([
-                'status' => false,
-                'message' => [
-                    'ar' => 'يجب تسجيل الدخول',
-                    'en' => 'Unauthenticated'
-                ]
-            ]);
-        }
-
-        $validate = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string', 'max:2000'],
-            'category_id' => ['required', 'integer', 'exists:categories,id'],
-            'city' => ['required', 'string', 'max:255'],
-            'address' => ['required', 'string', 'max:255'],
-            'cover'   =>['required','image','mimes:jpg,png,jpeg,gif','max:2024'],
-        ]);
-
-        $hotel = Hotel::create($validate);
-
-        $hotel ->addMediaFromRequest('cover')->toMediaCollection('cover');
-
-        return response()->json([
-            'status' => true,
-            'message' => [
-                'ar' => 'تم بنجاح',
-                'en' => 'succssefully'
-
-            ],
-            'data' => [
-                'id'  => $hotel->id,
-                'name' => $hotel->name,
-                'description' => $hotel->description,
-                'category_id' => $hotel->category_id,
-                'category' => $hotel->catergory?->name,
-                'city' => $hotel->city,
-                'address' => $hotel->city,
-                'cover' => $hotel->cover_url
-
-            ]
-        ]);
+    if (!$user) {
+        return $this->unauthorized([
+            'message' => 'unauthorized',
+        ], 401);
     }
+
+    $validate = $request->validated();
+
+    $hotel = Hotel::create($validate);
+
+    
+    if ($request->hasFile('cover')) {
+        $hotel
+            ->addMediaFromRequest('cover')
+            ->toMediaCollection('cover');
+    }
+
+    return response()->json([
+        'status' => true,
+        'message' => [
+            'ar' => 'تم بنجاح',
+            'en' => 'successfully'
+        ],
+        'data' => new HotelResource($hotel)
+    ]);
+}
+
 
     public function destroy(Request $request, $id)
     {
 
         $user = $request->user();
 
-        // بنتاكد المستخدم مسجل دخول
         if (!$user) {
             return response()->json([
                 'status' => false,
@@ -141,6 +127,28 @@ class HotelController extends Controller
                 'ar' => 'تم بنجاح',
                 'en' => 'update successfuly',
             ]
+        ]);
+    }
+
+    public function index(){
+        $hotels=Hotel::all();
+
+        return response()->json([
+            'status'=>true,
+            'message'=>'successful',
+            'data'=> HotelResource::collection($hotels),// collection --> list
+        ]);
+    }
+
+    public function show($id){
+
+        $hotel=Hotel::findOrFail($id);
+
+        return response()->json([
+            'status'=>true,
+            'message'=>'successful',
+            'data'=>  new HotelResource($hotel)
+
         ]);
     }
 }

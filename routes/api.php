@@ -20,5 +20,7 @@ Route::middleware('auth:sanctum')->prefix('hotels')->group(function () {
 //register
 Route::post('/register', [AuthController::class, 'register']);
 
-Route::post('/login', [AuthController::class, 'login']);
-// Route::post('/login', [AuthController::class,'login']);
+
+
+Route::get('/hotels',[HotelController::class,'index']);
+Route::get('hotels/{id}',[HotelController::class,'show']);
