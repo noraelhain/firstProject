@@ -20,25 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
     ->withExceptions(function (Exceptions $exceptions) {
 
-        $exceptions->render(function (Throwable $e, $request) {
-
-            if ($request->is('api/*')) {
-
-              
-                if ($e instanceof ModelNotFoundException) {
-                    return response()->json([
-                        'status' => false,
-                        'message' => 'Not found',
-                    ], 404);
-                }
-
-                return response()->json([
-                    'status' => false,
-                    'message' => 'server error',
-                ], 500);
-            }
-
-        });
+//
 
     })
 

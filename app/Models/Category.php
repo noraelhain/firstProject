@@ -11,8 +11,8 @@ class Category extends Model
         'description',
     ];
 
-    public function hotels()
-    {
-        return $this->hasMany(Hotel::class);
-    }
+    // public function hotels()
+    // {
+    //     return $this->hasMany(Hotel::class);
+    // }
 }

@@ -12,22 +12,21 @@ class HotelController extends Controller
 {
 
     use ApiResponse;
-public function store(HotelRequest $request)
+public function store( Request $request,HotelRequest $hotelRequest)
 {
-    $user = $request->user();
+    $user = $hotelRequest->user();
 
-    if (!$user) {
-        return $this->unauthorized([
-            'message' => 'unauthorized',
-        ], 401);
-    }
+    // $this->authorize('create',Hotel::class);
 
-    $validate = $request->validated();
 
+    $validate = $hotelRequest->validated();
+
+    $validate['user_id'] = $request->user()->id;
+    
     $hotel = Hotel::create($validate);
 
     
-    if ($request->hasFile('cover')) {
+    if ($hotelRequest->hasFile('cover')) {
         $hotel
             ->addMediaFromRequest('cover')
             ->toMediaCollection('cover');
@@ -49,15 +48,6 @@ public function store(HotelRequest $request)
 
         $user = $request->user();
 
-        if (!$user) {
-            return response()->json([
-                'status' => false,
-                'message' => [
-                    'ar' => 'يجب تسجيل الدخول',
-                    'en' => 'Unauthenticated'
-                ]
-            ]);
-        }
 
         // اجد الفندق
 
@@ -71,6 +61,16 @@ public function store(HotelRequest $request)
                     'en' => 'not found'
                 ]
             ]);
+        }
+
+                if ($user->id !==$hotel->user_id) {
+            return response()->json([
+                'status' => false,
+                'message' => [
+                    'ar' => 'ydv lwvp fi',
+                    'en' => 'Unauthenticated'
+                ]
+                ],403);
         }
 
         $hotel->delete();
@@ -101,14 +101,24 @@ public function store(HotelRequest $request)
 
         $hotel = Hotel::findOrFail($id);
 
-        if (!$hotel) {
+        // if (!$hotel) {
+        //     return response()->json([
+        //         'status' => false,
+        //         'message' => [
+        //             'ar' => 'غير موجود',
+        //             'en' => 'not found'
+        //         ]
+        //     ]);
+        // }
+
+                if ($user->id !==$hotel->user_id) {
             return response()->json([
                 'status' => false,
                 'message' => [
-                    'ar' => 'غير موجود',
-                    'en' => 'not found'
+                    'ar' => 'غير مصرح به',
+                    'en' => 'Unauthenticated'
                 ]
-            ]);
+                ],403);
         }
 
         $validate = $request->validate([

@@ -13,9 +13,13 @@ return new class extends Migration
     {
         Schema::create('hotels', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained();
             $table->foreignId('category_id')->constrained('categories');
+            $table->string('name');
             $table->string('address');
             $table->string('city');
+            $table->decimal('price');
+            $table->unsignedInteger('discount_value');
             $table->string('description');
             $table->timestamps();
         });

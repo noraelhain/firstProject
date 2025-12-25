@@ -14,14 +14,17 @@ class HotelFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
     public function definition(): array
     {
         return [
-            'name'=>$this->fake()->name(),
-            'city'=>$this->fake()->city(),
-            'description'=>$this->fake()->description(),
-            'address'=>$this->fake()->address(),
-            'category_id'=>\App\Models\Category::factory(),
+            // 'name'=>fake()->name(),
+            'city'=>fake()->city(),
+            // 'description'=>null,
+            'address'=>fake()->address(),
+            'price'=>fake()->numberBetween(500,200),
+            // 'category_id'=>null,
+            'discount_value'=>fake()->numberBetween(5,40),
         ];
     }
 }

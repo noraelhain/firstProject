@@ -27,6 +27,8 @@ class HotelRequest extends FormRequest
             'category_id' => ['required', 'integer', 'exists:categories,id'],
             'city' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
+            'price'   =>['nullable'],
+            'discount_value'=>['nullable']
             // 'cover'   =>['required','image','mimes:jpg,png,jpeg,gif','max:2024'],
         ];
     }
